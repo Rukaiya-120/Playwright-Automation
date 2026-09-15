@@ -16,4 +16,7 @@ test('DoMoney Create Agent', async ({ page }) => {
   // Optional: verify User List page loaded
   await expect(page).toHaveURL(/\/admin\/users/);
 
+  await page.locator('tbody tr').first().locator('td').last().getByRole('button', { name: 'View' }).click();
+  await page.waitForTimeout(120000);
+
 });
