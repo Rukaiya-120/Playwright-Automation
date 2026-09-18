@@ -1,20 +1,23 @@
 import { test, expect } from '@playwright/test';
 import { getMessageContent } from '../services/gmailAuth';
 import { extractOTP } from '../utils/extractOTP';
+import { getAgentCredentials } from '../utils/agentData';
 
-test('DoMoney Create Agent', async ({ page, request }) => {
-  await page.goto('https://dmoneyportal.roadtocareer.net');
-  await page.getByRole('link', { name: 'Login to Dashboard' }).click();
+test.use({ storageState: { cookies: [], origins: [] } });
 
-  await page.getByRole('textbox', { name: 'Email or Phone Number' }).fill('rukaiyahaque1229+agent@gmail.com');
-  await page.getByRole('textbox', { name: 'Password' }).fill('123456');
+test('DoMoney Agent Login', async ({ page, request }) => {
+  const { email, password } = await getAgentCredentials();
+
+  await page.goto('https://dmoneyportal.roadtocareer.net/login');
+
+  await page.getByRole('textbox', { name: 'Email or Phone Number' }).fill(email);
+  await page.getByRole('textbox', { name: 'Password' }).fill(password);
   
   await page.getByRole('button', { name: 'Login →' }).click();
-	const messageBody = await getMessageContent(request);
-    console.log('Message Body:', messageBody);
-	const otp = extractOTP(messageBody);
-	console.log('Extracted OTP:', otp);
-  await page.pause();
+  const otp = extractOTP(await getMessageContent(request));
+  await page.getByRole('textbox', { name: /OTP/i }).fill(otp);
+  await page.getByRole('button', { name: /Verify|Login/i }).click();
+  await expect(page.getByText(/Agent Dashboard|Agent/i).first()).toBeVisible();
 
 
 });
