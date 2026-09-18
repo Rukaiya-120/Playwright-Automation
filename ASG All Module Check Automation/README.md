@@ -133,8 +133,6 @@ ASG All Module Check Automation/
 ### Compliance
 - `tests/compliacne/compliance.spec.ts`
 
-> Note: the folder name is currently spelled `compliacne` and may be renamed to `compliance` later for consistency.
-
 ### Dashboard
 - `tests/dashboard/dashboard.spec.ts`
 
