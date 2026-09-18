@@ -1,11 +1,12 @@
 import { test, expect } from '@playwright/test';
 
+import { ReportsPage } from '../../pages/ReportsPage';
+
 test.setTimeout(120000);
 
 test('Sales Cohort', async ({ page }) => {
-    await page.goto('/sales-cohort-report');
-       await expect(
-        page.getByText('Sales Activity Cohort Report', { exact: true })
-    ).toBeVisible();
-    
+  const reportsPage = new ReportsPage(page);
+
+  await page.goto('/sales-cohort-report');
+  await expect(reportsPage.salesCohortReportHeader).toBeVisible();
 });

@@ -1,30 +1,25 @@
 import { test, expect } from '@playwright/test';
 
+import { TechSupportPage } from '../../pages/TechSupportPage';
+
 test.setTimeout(120000);
 
 test('Tech Support', async ({ page }) => {
+  const techSupportPage = new TechSupportPage(page);
 
-  // Open Installed Tracker
   await page.goto('/tech-support-call-attempts');
-  // Verify page loaded
-  await expect(page.getByRole('textbox', { name: 'Find a lead' })).toBeVisible({ timeout: 30000 });
-  // Search customer
-    const searchBox =  page.getByRole('textbox', { name: 'Find a lead' });
+  await expect(techSupportPage.leadSearch).toBeVisible({ timeout: 30000 });
 
-    await searchBox.click();     
-    await searchBox.fill('test');     
-    await page.getByTitle('Search').click();
-    await expect(searchBox).toHaveValue('test');
+  await techSupportPage.leadSearch.click();
+  await techSupportPage.leadSearch.fill('test');
+  await techSupportPage.searchButton.click();
+  await expect(techSupportPage.leadSearch).toHaveValue('test');
 
-    await searchBox.fill('');
-    await page.getByTitle('Search').click();
-    await expect(searchBox).toHaveValue('');
+  await techSupportPage.leadSearch.fill('');
+  await techSupportPage.searchButton.click();
+  await expect(techSupportPage.leadSearch).toHaveValue('');
 
-
-  // Open Filter
-  await page.getByRole('cell', { name: 'Sep, 2026 - 30 Sep, 2026' }).click();
-  await page.locator('.dateviewed').click();
-  await page.locator('#DateRange').selectOption('AllTime');
+  await techSupportPage.dateRangeCell.click();
+  await techSupportPage.dateRangeDropdown.selectOption('AllTime');
   await page.getByRole('button', { name: 'Apply' }).click();
-
 });

@@ -1,132 +1,55 @@
-
 import { test, expect } from '@playwright/test';
+
+import { TechPayrollPage } from '../../pages/TechPayrollPage';
 
 test.setTimeout(120000);
 
 test('Tech Payroll - Auditing', async ({ page }) => {
+  const techPayrollPage = new TechPayrollPage(page);
 
   await page.goto('/tech-payroll/auditing');
 
-  // Verify page loaded
-  await expect(
-    page.getByRole('textbox', {
-      name: 'Find a customer by name or id'
-    })
-  ).toBeVisible();
+  await expect(techPayrollPage.customerSearch).toBeVisible();
 
-  // Search customer
-  await page.getByRole('textbox', {
-    name: 'Find a customer by name or id'
-  }).click();
+  await techPayrollPage.customerSearch.click();
+  await techPayrollPage.customerSearch.fill('test');
+  await expect(techPayrollPage.customerSearch).toHaveValue('test');
 
-  await page.getByRole('textbox', {
-    name: 'Find a customer by name or id'
-  }).fill('test');
+  await techPayrollPage.searchButton.click();
 
-  // Verify search value
-  await expect(
-    page.getByRole('textbox', {
-      name: 'Find a customer by name or id'
-    })
-  ).toHaveValue('test');
+  await techPayrollPage.customerSearch.click();
+  await techPayrollPage.customerSearch.fill('');
+  await expect(techPayrollPage.customerSearch).toHaveValue('');
 
-  await page.locator('#searchBtnWillBePaid').click();
+  await techPayrollPage.searchButton.click();
 
-  // Clear search
-  await page.getByRole('textbox', {
-    name: 'Find a customer by name or id'
-  }).click();
+  await techPayrollPage.filterButton.click();
+  await expect(techPayrollPage.branchFilter).toBeVisible();
 
-  await page.getByRole('textbox', {
-    name: 'Find a customer by name or id'
-  }).fill('');
+  await techPayrollPage.branchFilter.selectOption('1');
+  await expect(techPayrollPage.branchFilter).toHaveValue('1');
 
-  // Verify search is cleared
-  await expect(
-    page.getByRole('textbox', {
-      name: 'Find a customer by name or id'
-    })
-  ).toHaveValue('');
+  await techPayrollPage.applyButton.click();
 
-  await page.locator('#searchBtnWillBePaid').click();
+  await techPayrollPage.filterButton.click();
+  await expect(techPayrollPage.resetButton).toBeVisible();
+  await techPayrollPage.resetButton.click();
+  await expect(techPayrollPage.branchFilter).not.toHaveValue('1');
 
-  // Open Filter
-  await page.getByRole('button', { name: 'Filter' }).click();
+  await techPayrollPage.dateRangeCell.click();
+  await expect(techPayrollPage.dateRangeDropdown).toBeVisible();
+  await techPayrollPage.dateRangeDropdown.selectOption('AllTime');
+  await expect(techPayrollPage.dateRangeDropdown).toHaveValue('AllTime');
 
-  // Verify Branch filter is visible
-  await expect(
-    page.locator('#FilterBranch')
-  ).toBeVisible();
+  await techPayrollPage.applyButton.nth(1).click();
 
-  // Select Branch
-  await page.locator('#FilterBranch').selectOption('1');
+  await techPayrollPage.tabs.getByText('Overrides').click();
+  await expect(techPayrollPage.tabs.getByText('Overrides')).toBeVisible();
 
-  // Verify Branch selection
-  await expect(
-    page.locator('#FilterBranch')
-  ).toHaveValue('1');
+  await techPayrollPage.tabs.getByText('Deductions').click();
+  await expect(techPayrollPage.tabs.getByText('Deductions')).toBeVisible();
 
-  await page.getByRole('button', { name: 'Apply' }).click();
-
-  // Open Filter again
-  await page.getByRole('button', { name: 'Filter' }).click();
-
-  // Verify Reset button is visible
-  await expect(
-    page.getByRole('button', { name: 'Reset' })
-  ).toBeVisible();
-
-  // Reset filter
-  await page.getByRole('button', { name: 'Reset' }).click();
-
-  // Verify Branch filter is reset
-  await expect(
-    page.locator('#FilterBranch')
-  ).not.toHaveValue('1');
-
-  // Open date filter
-  await page.getByRole('cell', {
-    name: 'Sep, 2026 - 30 Sep, 2026'
-  }).click();
-
-  // Verify Date Range dropdown is visible
-  await expect(
-    page.locator('#DateRange')
-  ).toBeVisible();
-
-  // Select All Time
-  await page.locator('#DateRange').selectOption('AllTime');
-
-  // Verify All Time is selected
-  await expect(
-    page.locator('#DateRange')
-  ).toHaveValue('AllTime');
-
-  await page.getByRole('button', { name: 'Apply' }).nth(1).click();
-
-  // Overrides tab
-  await page.locator('#myTab').getByText('Overrides').click();
-
-  // Verify Overrides tab is selected
-  await expect(
-    page.locator('#myTab').getByText('Overrides')
-  ).toBeVisible();
-
-  // Deductions tab
-  await page.locator('#myTab').getByText('Deductions').click();
-
-  // Verify Deductions tab is selected
-  await expect(
-    page.locator('#myTab').getByText('Deductions')
-  ).toBeVisible();
-
-  // Add Ons tab
-  await page.locator('#myTab').getByText('Add Ons').click();
-
-  // Verify Add Ons tab is selected
-  await expect(
-    page.locator('#myTab').getByText('Add Ons')
-  ).toBeVisible();
-
+  await techPayrollPage.tabs.getByText('Add Ons').click();
+  await expect(techPayrollPage.tabs.getByText('Add Ons')).toBeVisible();
 });
 

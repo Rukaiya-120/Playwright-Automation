@@ -1,24 +1,28 @@
 import { test, expect } from '@playwright/test';
 
+import { VerificationCallsPage } from '../../pages/VerificationCallsPage';
+
 test.setTimeout(120000);
 
 test('Verification Call Resolution', async ({ page }) => {
+  const verificationCallsPage = new VerificationCallsPage(page);
 
-  // Open Installed Tracker
   await page.goto('/verification-calls/resolution');
-  await page.getByRole('textbox', { name: 'Find a Resolution' }).click();
-  await page.getByRole('textbox', { name: 'Find a Resolution' }).fill('test');
-  await page.locator('#searchSOPbutton').click();
-  await page.getByRole('textbox', { name: 'Find a Resolution' }).click();
-  await page.getByRole('textbox', { name: 'Find a Resolution' }).fill('');
-  await page.locator('#searchSOPbutton').click();
-  await page.locator('#ResolutionStatus').selectOption('All');
+  await verificationCallsPage.resolutionSearch.click();
+  await verificationCallsPage.resolutionSearch.fill('test');
+  await verificationCallsPage.sopSearchButton.click();
+  await verificationCallsPage.resolutionSearch.click();
+  await verificationCallsPage.resolutionSearch.fill('');
+  await verificationCallsPage.sopSearchButton.click();
+
+  await verificationCallsPage.resolutionStatus.selectOption('All');
   await page.locator('.dateTable').click();
-  await page.locator('#DateRange').selectOption('Today');
-  await page.getByRole('button', { name: 'Apply' }).click();
+  await verificationCallsPage.dateRangeDropdown.selectOption('Today');
+  await verificationCallsPage.applyButton.click();
+
   await page.locator('.dateTable').click();
-  await page.locator('#DateRange').selectOption('AllTime');
-  await page.getByRole('button', { name: 'Apply' }).click();
-  await page.locator('#EmployeeDropdown').selectOption('ac0ce890-bc5b-4c34-aab2-017af19bedf6');
-  
+  await verificationCallsPage.dateRangeDropdown.selectOption('AllTime');
+  await verificationCallsPage.applyButton.click();
+
+  await verificationCallsPage.employeeDropdown.selectOption('ac0ce890-bc5b-4c34-aab2-017af19bedf6');
 });
