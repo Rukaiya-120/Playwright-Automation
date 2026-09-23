@@ -1,8 +1,9 @@
 import { test, expect } from '@playwright/test';
+import { AdminUsersPage } from '../pages/adminUsersPage';
 
 test('DoMoney Admin LogIn', async ({ page }) => {
-  await page.goto('https://dmoneyportal.roadtocareer.net/admin/users');
-  await expect(page).toHaveURL(/\/admin\/users/);
-  await expect(page.getByText('Admin Dashboard')).toBeVisible();
+  const adminUsersPage = new AdminUsersPage(page);
+  await adminUsersPage.open();
+  await adminUsersPage.expectDashboard();
 
 });

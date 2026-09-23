@@ -2,22 +2,22 @@ import { test, expect } from '@playwright/test';
 import { getMessageContent } from '../services/gmailAuth';
 import { extractOTP } from '../utils/extractOTP';
 import { getAgentCredentials } from '../utils/agentData';
+import { AgentLoginPage } from '../pages/agentLoginPage';
 
 test.use({ storageState: { cookies: [], origins: [] } });
 
 test('DoMoney Agent Login', async ({ page, request }) => {
   const { email, password } = await getAgentCredentials();
+  const agentLoginPage = new AgentLoginPage(page);
 
-  await page.goto('https://dmoneyportal.roadtocareer.net/login');
+  await agentLoginPage.open();
 
-  await page.getByRole('textbox', { name: 'Email or Phone Number' }).fill(email);
-  await page.getByRole('textbox', { name: 'Password' }).fill(password);
-  
-  await page.getByRole('button', { name: 'Login →' }).click();
+  await agentLoginPage.submitCredentials(email, password);
+  await page.waitForTimeout(10000);
   const otp = extractOTP(await getMessageContent(request));
-  await page.getByRole('textbox', { name: /OTP/i }).fill(otp);
-  await page.getByRole('button', { name: /Verify|Login/i }).click();
+  await agentLoginPage.enterOtp(otp);
+  await agentLoginPage.verifyOtp();
   await expect(page.getByText(/Agent Dashboard|Agent/i).first()).toBeVisible();
-
+  await agentLoginPage.expectCurrentBalance('2000.00');
 
 });

@@ -1,19 +1,19 @@
 import { test, expect } from '@playwright/test';
 import { getAgentPhone } from '../utils/agentData';
+import { LoginPage } from '../pages/loginPage';
+import { AgentCashInPage } from '../pages/agentCashInPage';
 
 test.use({ storageState: { cookies: [], origins: [] } });
 
 test('System cashes in to the created agent', async ({ page }) => {
 	const agentPhone = await getAgentPhone();
+	const loginPage = new LoginPage(page);
+	const agentCashInPage = new AgentCashInPage(page);
 
-	await page.goto('https://dmoneyportal.roadtocareer.net/login');
-	await page.getByRole('textbox', { name: 'Email or Phone Number' }).fill('SYSTEM');
-	await page.getByRole('textbox', { name: 'Password' }).fill('1234');
-	await page.getByRole('button', { name: 'Login →' }).click();
+	await loginPage.open();
+	await loginPage.login('SYSTEM', '1234');
 	await expect(page.getByText('Agent Dashboard')).toBeVisible();
 
-	await page.goto('https://dmoneyportal.roadtocareer.net/agent/cash-in');
-	await page.getByRole('textbox', { name: 'Customer Phone Number' }).fill(agentPhone);
-	await page.getByRole('spinbutton', { name: 'Amount (BDT)' }).fill('2000');
-	await page.getByRole('button', { name: 'Cash In →' }).click();
+	await agentCashInPage.open();
+	await agentCashInPage.cashIn(agentPhone, '2000');
 });

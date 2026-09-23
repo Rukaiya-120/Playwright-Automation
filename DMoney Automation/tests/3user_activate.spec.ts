@@ -1,22 +1,9 @@
 import { test, expect } from '@playwright/test';
+import { AdminUsersPage } from '../pages/adminUsersPage';
 
 test('DoMoney Agent Activate', async ({ page }) => {
-await page.goto('https://dmoneyportal.roadtocareer.net/admin/users');
-
-
-const firstRow = page.locator('tbody tr').first();
-
-await expect(firstRow).toBeVisible();
-
-await firstRow.getByRole('button', { name: 'VIEW' }).click();
-await page.waitForTimeout(2000);
-await page.getByRole('button', { name: 'Edit User' }).click();
-const statusDropdown = page.getByRole('combobox').nth(1);
-
-await statusDropdown.click();
-
-await page.getByRole('option', { name: 'Active' }).click();
-
-await page.getByRole('button', { name: 'Save Changes' }).click();
-
+	const adminUsersPage = new AdminUsersPage(page);
+	await adminUsersPage.open();
+	await adminUsersPage.activateFirstUser();
+	await adminUsersPage.expectUserUpdated();
 });
