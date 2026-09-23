@@ -25,9 +25,11 @@ jobs:
         working-directory: DMoney Automation
 
     steps:
+      # 1. Checkout repository
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      # 2. Setup Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
@@ -35,21 +37,41 @@ jobs:
           cache: npm
           cache-dependency-path: 'DMoney Automation/package-lock.json'
 
+      # 3. Install dependencies
       - name: Install dependencies
         run: npm ci
 
+      # 4. Install Chromium
       - name: Install Playwright Browsers
         run: npx playwright install chromium --with-deps
 
+      # 5. Check that DMoney website is reachable from GitHub Actions
+      - name: Check DMoney website
+        run: |
+          echo "Checking DMoney website..."
+          curl -L -I --max-time 30 https://dmoneyportal.roadtocareer.net
+
+      # 6. Run Playwright tests
       - name: Run Playwright tests
-        run: npx playwright test
+        run: npx playwright test --retries=2 --workers=1
         env:
           Gmail_Access_Token: ${{ secrets.GMAIL_ACCESS_TOKEN }}
+          CI: true
 
+      # 7. Upload Playwright HTML report
       - name: Upload Playwright report
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v4
         with:
           name: dmoney-playwright-report
           path: 'DMoney Automation/playwright-report/'
+          retention-days: 30
+
+      # 8. Upload test results, screenshots, videos and traces
+      - name: Upload Playwright test results
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: dmoney-playwright-test-results
+          path: 'DMoney Automation/test-results/'
           retention-days: 30
