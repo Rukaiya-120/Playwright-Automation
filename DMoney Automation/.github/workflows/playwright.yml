@@ -19,6 +19,8 @@ jobs:
       run: npx playwright install --with-deps
     - name: Run Playwright tests
       run: npx playwright test
+      env:
+        Gmail_Access_Token: ${{ secrets.GMAIL_ACCESS_TOKEN }}
     - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
       with:
