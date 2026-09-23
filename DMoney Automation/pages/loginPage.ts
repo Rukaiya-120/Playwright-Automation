@@ -8,19 +8,16 @@ export class LoginPage {
 	}
 
 async openFromHome(): Promise<void> {
-    await this.page.goto('https://dmoneyportal.roadtocareer.net', {
+    await this.page.goto('/', {
         waitUntil: 'domcontentloaded',
     });
 
     console.log('Current URL:', this.page.url());
     console.log('Page title:', await this.page.title());
 
-    await this.page.screenshot({
-        path: 'homepage-debug.png',
-        fullPage: true,
-    });
-
-    await this.page.getByRole('link', { name: 'Login to Dashboard' }).click();
+    await this.page.getByRole('link', {
+        name: 'Login to Dashboard',
+    }).click();
 }
 	async login(emailOrPhone: string, password: string): Promise<void> {
 		await this.page.getByRole('textbox', { name: 'Email or Phone Number' }).fill(emailOrPhone);

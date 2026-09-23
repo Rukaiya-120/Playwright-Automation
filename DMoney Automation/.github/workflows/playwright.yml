@@ -41,10 +41,28 @@ jobs:
       - name: Install Playwright Browsers
         run: npx playwright install chromium --with-deps
 
+      - name: Check DMoney website
+        run: |
+          echo "Checking DMoney website..."
+          curl -L --max-time 30 -s https://dmoneyportal.roadtocareer.net > dmoney-home.html
+
+          echo "Response size:"
+          wc -c dmoney-home.html
+
+          echo "Checking for Cloudflare challenge..."
+          if grep -qi "Just a moment" dmoney-home.html; then
+            echo "WARNING: Cloudflare challenge detected."
+          fi
+
+          if grep -qi "cloudflare" dmoney-home.html; then
+            echo "WARNING: Cloudflare detected."
+          fi
+
       - name: Run Playwright tests
         run: npx playwright test
         env:
           Gmail_Access_Token: ${{ secrets.GMAIL_ACCESS_TOKEN }}
+          CI: true
 
       - name: Upload Playwright report
         if: ${{ !cancelled() }}
@@ -52,4 +70,12 @@ jobs:
         with:
           name: dmoney-playwright-report
           path: 'DMoney Automation/playwright-report/'
+          retention-days: 30
+
+      - name: Upload Playwright test results
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: dmoney-playwright-test-results
+          path: 'DMoney Automation/test-results/'
           retention-days: 30
