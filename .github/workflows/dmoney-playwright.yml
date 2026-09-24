@@ -18,7 +18,8 @@ on:
 jobs:
   test:
     timeout-minutes: 60
-    runs-on: ubuntu-latest
+    # Hardcoded to ubuntu-24.04 to resolve the upcoming ubuntu-latest migration notice
+    runs-on: ubuntu-24.04
 
     defaults:
       run:
@@ -33,7 +34,8 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: lts/*
+          # Explicitly targeting Node 24 to clear the Node.js 20 deprecation warning
+          node-version: 24
           cache: npm
           cache-dependency-path: 'DMoney Automation/package-lock.json'
 
