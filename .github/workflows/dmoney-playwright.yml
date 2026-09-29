@@ -18,7 +18,6 @@ on:
 jobs:
   test:
     timeout-minutes: 60
-    # Hardcoded to ubuntu-24.04 to resolve the upcoming ubuntu-latest migration notice
     runs-on: ubuntu-24.04
 
     defaults:
@@ -26,41 +25,42 @@ jobs:
         working-directory: DMoney Automation
 
     steps:
-      # 1. Checkout repository
+
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # 2. Setup Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          # Explicitly targeting Node 24 to clear the Node.js 20 deprecation warning
           node-version: 24
           cache: npm
           cache-dependency-path: 'DMoney Automation/package-lock.json'
 
-      # 3. Install dependencies
       - name: Install dependencies
         run: npm ci
 
-      # 4. Install Chromium
       - name: Install Playwright Browsers
         run: npx playwright install chromium --with-deps
 
-      # 5. Check that DMoney website is reachable from GitHub Actions
       - name: Check DMoney website
         run: |
           echo "Checking DMoney website..."
-          curl -L -I --max-time 30 https://dmoneyportal.roadtocareer.net
 
-      # 6. Run Playwright tests
+          curl -L --max-time 30 \
+            https://dmoneyportal.roadtocareer.net \
+            -o dmoney-response.html
+
+          echo "Checking response..."
+
+          grep -i -E "Just a moment|Cloudflare|DMoney" \
+            dmoney-response.html || true
+
       - name: Run Playwright tests
-        run: npx playwright test --retries=2 --workers=1
+        run: npx playwright test
         env:
           Gmail_Access_Token: ${{ secrets.GMAIL_ACCESS_TOKEN }}
           CI: true
 
-      # 7. Upload Playwright HTML report
       - name: Upload Playwright report
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v4
@@ -69,8 +69,7 @@ jobs:
           path: 'DMoney Automation/playwright-report/'
           retention-days: 30
 
-      # 8. Upload test results, screenshots, videos and traces
-      - name: Upload Playwright test results
+      - name: Upload test results
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v4
         with:
