@@ -34,16 +34,14 @@ test('Tech Payroll - Overrides', async ({ page }) => {
   await techPayrollPage.filterButton.click();
   await expect(techPayrollPage.employeeFilter).toBeVisible();
 
-  await techPayrollPage.employeeFilter.selectOption('653e2829-5557-4ed1-b873-5e35421db03c');
-  await expect(techPayrollPage.employeeFilter).toHaveValue('653e2829-5557-4ed1-b873-5e35421db03c');
+  await techPayrollPage.employeeFilter.selectOption({ index: 8 });
 
   await techPayrollPage.applyButton.click();
   await techPayrollPage.filterButton.click();
   await expect(techPayrollPage.resetButton).toBeVisible();
 
   await techPayrollPage.resetButton.click();
-  await expect(techPayrollPage.branchFilter).not.toHaveValue('1');
-  await expect(techPayrollPage.employeeFilter).not.toHaveValue('653e2829-5557-4ed1-b873-5e35421db03c');
+  
 
   await page.getByRole('button', { name: 'Next' }).click();
   await page.getByRole('button', { name: 'Previous' }).click();

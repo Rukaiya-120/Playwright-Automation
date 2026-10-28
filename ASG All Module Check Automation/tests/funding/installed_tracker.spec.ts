@@ -22,8 +22,12 @@ test('Installed Tracker', async ({ page }) => {
   await expect(installedTrackerPage.searchBox).toHaveValue('');
 
   await installedTrackerPage.dateRangeCell.click();
+  await installedTrackerPage.dateRangeDropdown.waitFor({state: 'visible',});
+
   await installedTrackerPage.dateRangeDropdown.selectOption('AllTime');
-  await page.getByRole('button', { name: 'Apply' }).click();
+  await installedTrackerPage.applyButton.click();
+    // Scroll to the Next button
+  await installedTrackerPage.nextButton.scrollIntoViewIfNeeded();
 
   await expect(installedTrackerPage.nextButton).toBeVisible({ timeout: 30000 });
   await installedTrackerPage.nextButton.click();

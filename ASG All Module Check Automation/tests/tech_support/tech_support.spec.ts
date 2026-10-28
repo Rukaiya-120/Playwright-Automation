@@ -22,4 +22,12 @@ test('Tech Support', async ({ page }) => {
   await techSupportPage.dateRangeCell.click();
   await techSupportPage.dateRangeDropdown.selectOption('AllTime');
   await page.getByRole('button', { name: 'Apply' }).click();
+  await techSupportPage.techRow.first().click();
+  await page.waitForTimeout(20000);
+// Check for the error popup
+  const errorPopup = page.getByText('Something Went Wrong', {
+      exact: false
+  });
+
+  await expect(errorPopup).toBeHidden({ timeout: 5000 });
 });

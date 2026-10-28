@@ -12,6 +12,6 @@ export class ReportsPage {
     this.downloadLogHeader = page.getByText('Download Log List', { exact: true });
     this.pendVertStatusHeader = page.getByText('Pend Vert Status List', { exact: true });
     this.salesCohortReportHeader = page.getByText('Sales Activity Cohort Report', { exact: true });
-    this.techCheckInOutHeader = page.getByText('Reports 1 Sep, 2026 - 30 Sep');
-  }
+    this.techCheckInOutHeader = page.locator('.ReportsTitle');
+}
 }

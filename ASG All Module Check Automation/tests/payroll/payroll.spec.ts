@@ -55,7 +55,7 @@ test('Payroll Weekly Pay', async ({ page }) => {
 
   await page.goto('/payroll/weeklypay');
   await payrollPage.filterButton.click();
-  await payrollPage.batchFilter.selectOption('19');
+  await payrollPage.batchFilter.selectOption({ index: 0 });
   await page.waitForTimeout(3000);
   await payrollPage.applyButton.click();
 });

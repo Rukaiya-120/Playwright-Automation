@@ -20,7 +20,7 @@ export class VerificationCallsPage {
     this.allCustomersHeader = page.locator('#divVerCustomerTable').getByText('All Customers');
     this.customerSearch = page.getByRole('textbox', { name: 'Search by customer' });
     this.searchButton = page.locator('#btnSearchCustomer');
-    this.dateRangeCell = page.getByRole('cell', { name: 'Sep, 2026 - 30 Sep, 2026' });
+    this.dateRangeCell = page.locator('._GArn');
     this.dateRangeDropdown = page.locator('#DateRange');
     this.applyButton = page.getByRole('button', { name: 'Apply' });
     this.queueSearch = page.getByRole('textbox', { name: 'Search' });

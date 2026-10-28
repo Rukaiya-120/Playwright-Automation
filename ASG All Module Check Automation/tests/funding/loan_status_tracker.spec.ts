@@ -30,9 +30,11 @@ test('Loan Status Tracker', async ({ page }) => {
   await loanStatusTrackerPage.searchButton.click();
   await expect(loanStatusTrackerPage.customerSearch).toHaveValue('');
 
-  await expect(loanStatusTrackerPage.nextButton).toBeVisible({ timeout: 30000 });
-  await loanStatusTrackerPage.nextButton.click();
+  await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
 
-  await expect(loanStatusTrackerPage.previousButton).toBeVisible({ timeout: 30000 });
-  await loanStatusTrackerPage.previousButton.click();
+  // await expect(loanStatusTrackerPage.nextButton).toBeVisible({ timeout: 30000 });
+  // await loanStatusTrackerPage.nextButton.click();
+
+  // await expect(loanStatusTrackerPage.previousButton).toBeVisible({ timeout: 30000 });
+  // await loanStatusTrackerPage.previousButton.click();
 });

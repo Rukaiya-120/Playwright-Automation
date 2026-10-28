@@ -13,6 +13,11 @@ test('Funding Buyout', async ({ page }) => {
   await buyoutPage.customerSearch.fill('test');
   await buyoutPage.searchButton.click();
 
+  await buyoutPage.customerSearch.fill('');
+  await buyoutPage.searchButton.click();
+
+  await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+
   await expect(buyoutPage.nextButton).toBeVisible({ timeout: 30000 });
   await buyoutPage.nextButton.scrollIntoViewIfNeeded();
   await buyoutPage.nextButton.click();

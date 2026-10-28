@@ -14,7 +14,7 @@ test('Install Queue', async ({ page }) => {
 test('Service Scheduler', async ({ page }) => {
   const schedulingPage = new SchedulingPage(page);
 
-  await page.goto('/service-queue');
+  await page.goto('/service-scheduler');
   await expect(schedulingPage.serviceQueueHeading).toBeVisible();
 });
 

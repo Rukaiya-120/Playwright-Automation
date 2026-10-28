@@ -23,8 +23,8 @@ export class TechPayrollPage {
     this.applyButton = page.getByRole('button', { name: 'Apply' });
     this.customerSearch = page.getByRole('textbox', { name: 'Find a customer by name or id' });
     this.searchButton = page.locator('#searchBtnWillBePaid');
+    this.dateRangeCell = page.locator('._GArn');
     this.dateRangeDropdown = page.locator('#DateRange');
-    this.dateRangeCell = page.getByRole('cell', { name: 'Sep, 2026 - 30 Sep, 2026' });
     this.tabs = page.locator('#myTab');
     this.batchFilter = page.locator('#FilterBatch');
   }

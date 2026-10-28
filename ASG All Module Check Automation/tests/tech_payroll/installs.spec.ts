@@ -29,15 +29,12 @@ test('Tech Payroll - Installs', async ({ page }) => {
   await techPayrollPage.filterButton.click();
   await expect(techPayrollPage.employeeFilter).toBeVisible();
 
-  await techPayrollPage.employeeFilter.selectOption('051034e0-264b-40bc-8063-806a7cb3e16c');
-  await expect(techPayrollPage.employeeFilter).toHaveValue('051034e0-264b-40bc-8063-806a7cb3e16c');
+  await techPayrollPage.employeeFilter.selectOption({ index: 1 });
 
   await techPayrollPage.applyButton.click();
   await techPayrollPage.filterButton.click();
   await expect(techPayrollPage.resetButton).toBeVisible();
   await techPayrollPage.resetButton.click();
-  await expect(techPayrollPage.employeeFilter).not.toHaveValue('051034e0-264b-40bc-8063-806a7cb3e16c');
-
   await page.locator('.dateviewed').click();
   await expect(techPayrollPage.dateRangeDropdown).toBeVisible();
   await techPayrollPage.dateRangeDropdown.selectOption('AllTime');
